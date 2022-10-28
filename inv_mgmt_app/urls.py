@@ -5,7 +5,6 @@ app_name = 'inv_mgmt_app'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('generate_bundles/', views.generate_bundles, name='generate_bundles'),
-    
+    path('generate_box/', views.generate_box, name='generate_box'),
 ]
 
