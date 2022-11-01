@@ -1,14 +1,18 @@
 {% extends 'base.html' %}
 
 {% block title_block %}
-index
+Create Shipment
 {% endblock %}
 
 {% block body_block %}
-<form onsubmit="generate_bundles" method="POST">
+<form onsubmit="create_shipment" method="POST">
     {% csrf_token %}
 
     {{ form.as_p }}
+
+    {% csrf_token %}
+    {{ boxes_form.as_p }}
+
     <button>Submit</button>
 </form>
 {% endblock %}

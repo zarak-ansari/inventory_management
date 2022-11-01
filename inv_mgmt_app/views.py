@@ -4,8 +4,8 @@ from django.shortcuts import render
 from django.conf import settings
 from django.http import FileResponse
 
-from .forms import BoxForm, BundleGenerationForm
-from .models import Bundle
+from .forms import AddBoxesInShipmentForm, BoxForm, ShipmentForm
+from .models import Box, Bundle
 from . import barcode_helpers
 
 MEDIA_DIR = settings.MEDIA_DIR
@@ -25,10 +25,29 @@ def generate_box(request):
                 bundle.save()
             barcode_file_path = barcode_helpers.generate_barcode_for_box(box, MEDIA_DIR)
             return FileResponse(open(barcode_file_path, "rb"), as_attachment=True, content_type="application/pdf")
-
     else:
         form = BoxForm()
     
     context['form'] = form
 
     return render(request, "generate_box.html", context=context)
+
+def create_shipment(request):
+    context = {}
+    if request.method == 'POST':
+        form = ShipmentForm(request.POST)
+        boxes_form = AddBoxesInShipmentForm(request.POST)
+        if form.is_valid() and boxes_form.is_valid():
+            shipment = form.save()
+            box_codes = boxes_form.cleaned_data["boxes"].split() #boxes.split()
+            for box_code in box_codes:
+                b = barcode_helpers.get_box_from_barcode_string(box_code)
+                shipment.boxes.add(b)
+    else:
+        form = ShipmentForm()
+        boxes_form = AddBoxesInShipmentForm()
+
+    context['form'] = form
+    context['boxes_form'] = boxes_form
+
+    return render(request, "create_shipment.html", context=context)

@@ -1,10 +1,12 @@
+from datetime import date
+import string
 from barcode import Code128
 from barcode.writer import ImageWriter
 from PIL import Image
 import os
 from django.conf import settings
 
-from .models import Box, Bundle
+from .models import Box, Bundle, Denomination
 
 def generate_and_save_barcode(input_string: str, path):
     options = {
@@ -50,3 +52,14 @@ def generate_barcode_for_box(box: Box, path):
         barcode_list.append(bundle_barcode_string)
     file_location = image_list_to_pdf(barcode_list, path)
     return file_location
+
+def get_box_from_barcode_string(barcode_str : string):
+    date_str = barcode_str[0:8]
+    denom_code = barcode_str[8:10]
+    box_number = barcode_str[10:16]
+
+    date_obj = date(int(date_str[:4]), int(date_str[4:6]), int(date_str[6:8]))
+    denom = Denomination.objects.get(code=denom_code)
+
+    retrieved_box = Box.objects.get(packing_date=date_obj, denomination = denom, box_number=box_number)
+    return retrieved_box
