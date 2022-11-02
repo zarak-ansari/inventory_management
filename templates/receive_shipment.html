@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title_block %}
+Create Shipment
+{% endblock %}
+
+{% block body_block %}
+
+<h1>Receive Shipment</h1>
+
+<ul>
+    <li>{{ shipment.sent_from }}</li>
+    <li>{{ shipment.sent_to }}</li>
+    <li>{{ shipment.shipment_date }}</li>
+</ul>
+
+<form onsubmit="receive_shipment" method="POST">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button>Submit</button>
+</form>
+{% endblock %}

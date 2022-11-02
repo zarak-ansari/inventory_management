@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title_block %}
+Show Shipment Detail
+{% endblock %}
+
+{% block body_block %}
+
+<h1>Shipment Detail</h1>
+
+<ul>
+    <li>{{ shipment.sent_from }}</li>
+    <li>{{ shipment.sent_to }}</li>
+    <li>{{ shipment.shipment_date }}</li>
+</ul>
+
+<h1>Denomination Wise Summary</h1>
+<table>
+    {% for denom in denom_wise_count %}
+    <tr>
+        <td>{{ denom.denomination_name }}</td>
+        <td>{{ denom.dcount }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+<h1>Details of Boxes</h1>
+<table>
+    {% for box in boxes %}
+    <tr>
+        <td>{{ box.box_number }}</td>
+        <td>{{ box.denomination }}</td>
+        <td>{{ box.series_from }}</td>
+        <td>{{ box.serial_number_from }}</td>
+        <td>{{ box.series_to }}</td>
+        <td>{{ box.serial_number_to }}</td>
+        <td>{{ box.packing_date }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if shipment.is_delivered %}
+<p>Receipt of shipment has been acknowledged</p>
+{% else %}
+<a href="/receive_shipment/{{shipment.id}}">Confirm Shipment Receipt</a>
+{% endif %}
+6
+{% endblock %}

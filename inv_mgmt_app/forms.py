@@ -21,6 +21,6 @@ class ShipmentForm(forms.ModelForm):
         }
         
 
-class AddBoxesInShipmentForm(forms.Form):
+class GetBoxesForm(forms.Form):
     boxes = forms.CharField(widget=forms.Textarea)
     
